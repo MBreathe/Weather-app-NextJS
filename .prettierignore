@@ -1,0 +1,16 @@
+# Ignore artifacts:
+node_modules
+.next
+build
+dist
+coverage
+
+# Ignore lock files and environment files:
+pnpm-lock.yaml
+.env
+.env.local
+
+# Ignore images and icons:
+public/**/*.svg
+public/**/*.png
+public/**/*.jpg
