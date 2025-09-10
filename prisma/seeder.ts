@@ -1,16 +1,11 @@
-import { PrismaClient, Prisma } from "@/generated/prisma";
-import readlineHelper from "./utils/readlineHelper";
+import { PrismaClient } from "@prisma/client";
+import readlineHelper from "./utils/readlineHelper.ts";
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import progressBar from "./utils/progressBar";
+import progressBar from "./utils/progressBar.ts";
 
 const prisma = new PrismaClient().$extends(withAccelerate());
-enum Units {
-  metric = "metric",
-  imperial = "imperial",
-  standard = "standard",
-}
 
 async function seeder() {
   try {
@@ -25,7 +20,7 @@ async function seeder() {
     console.log("Seeding database...");
     if (dropCreateAdmin) {
       await prisma.user.deleteMany();
-      const admin: Prisma.UserCreateInput = {
+      const admin = {
         admin: true,
         username: "trueAdmin",
         email: "admin@gmail.com",
@@ -39,20 +34,19 @@ async function seeder() {
     }
 
     console.log(`Creating ${numUsers} users`);
-    const users: Prisma.UserCreateInput[] = [];
+    const users = [];
 
     for (let i = 0; i < numUsers; i++) {
-      const user: Prisma.UserCreateInput = {
+      const user = {
         username: faker.internet.username(),
         email: faker.internet.email(),
         password: await bcrypt.hash(faker.internet.password(), SALT_ROUNDS),
         preferences: {
-          units: faker.helpers.enumValue(Units),
+          units: faker.helpers.arrayElement(["metric", "imperial", "standard"]),
           notifications: faker.datatype.boolean(),
         },
       };
       users.push(user);
-      i++;
       progressBar(numUsers, i);
     }
     await prisma.user.createMany({ data: users });
