@@ -10,6 +10,31 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+enum Units {
+  standard
+  metric
+  imperial
+}
+
+type Preference {
+  units         Units   @default(metric)
+  notifications Boolean @default(true)
+}
+
+model User {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  admin       Boolean    @default(false)
+  username    String     @unique
+  email       String     @unique
+  password    String     @unique
+  location    String?
+  savedCities String[]
+  followedIds String[]   @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  preferences Preference
 }
