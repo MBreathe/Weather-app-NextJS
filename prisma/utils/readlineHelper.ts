@@ -45,6 +45,7 @@ async function readlineHelper() {
     };
   } catch (error) {
     console.error("Error seeding database: " + error);
+    throw error;
   } finally {
     rl.close();
   }
