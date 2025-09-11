@@ -3,13 +3,22 @@ import { stdin as input, stdout as output } from "node:process";
 
 async function readlineHelper() {
   const rl = readline.createInterface({ input, output });
-  let dropCreateAdmin = false;
+  let dropDB = false;
+  let admin = false;
 
   try {
     const drop = await rl.question("Should the DB be dropped? (y/n) ");
     if (drop.toLowerCase() === "y" || drop.toLowerCase() === "yes") {
-      dropCreateAdmin = true;
+      dropDB = true;
     }
+    const createAdmin = await rl.question("Should an admin be created? (y/n) ");
+    if (
+      createAdmin.toLowerCase() === "y" ||
+      createAdmin.toLowerCase() === "yes"
+    ) {
+      admin = true;
+    }
+    const dropCreateAdmin = { dropDB, dropCreateAdmin: true };
     const askNumUsers = async () => {
       const answer = await rl.question(
         "How many users do you want to create? "
@@ -19,8 +28,8 @@ async function readlineHelper() {
         console.error("Please enter a valid number.");
         return askNumUsers();
       }
-      if (num < 1) {
-        console.error("Please enter a number more than or equal to 1.");
+      if (num < 0) {
+        console.error("Please enter a positive number.");
         return askNumUsers();
       }
       if (num > 1000) {
@@ -31,7 +40,8 @@ async function readlineHelper() {
     };
     const numUsers = await askNumUsers();
     return {
-      dropCreateAdmin,
+      dropDB,
+      admin,
       numUsers,
     };
   } catch (error) {

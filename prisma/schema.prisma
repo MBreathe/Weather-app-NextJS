@@ -19,6 +19,12 @@ enum Units {
   imperial
 }
 
+type Location {
+  city      String?
+  latitude  Float?
+  longitude Float?
+}
+
 type Preference {
   units         Units   @default(metric)
   notifications Boolean @default(true)
@@ -30,7 +36,7 @@ model User {
   username    String     @unique
   email       String     @unique
   password    String     @unique
-  location    String?
+  location    Location?
   savedCities String[]
   followedIds String[]   @db.ObjectId
   createdAt   DateTime   @default(now())
