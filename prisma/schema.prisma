@@ -35,7 +35,7 @@ model User {
   admin       Boolean    @default(false)
   username    String     @unique
   email       String     @unique
-  password    String
+  password    String     @unique
   location    Location?
   savedCities String[]
   followedIds String[]   @db.ObjectId

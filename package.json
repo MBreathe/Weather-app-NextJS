@@ -13,9 +13,7 @@
     "prettier:check": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "prepare": "husky",
-    "seed": "pnpm dlx tsx prisma/seeder.ts",
-    "prisma:generate": "pnpm dlx prisma generate",
-    "prisma:push": "pnpm dlx prisma db push"
+    "seed": "pnpm dlx tsx prisma/seeder.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
