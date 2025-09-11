@@ -6,10 +6,40 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+enum Units {
+  standard
+  metric
+  imperial
+}
+
+type Location {
+  city      String?
+  latitude  Float?
+  longitude Float?
+}
+
+type Preference {
+  units         Units   @default(metric)
+  notifications Boolean @default(true)
+}
+
+model User {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  admin       Boolean    @default(false)
+  username    String     @unique
+  email       String     @unique
+  password    String     @unique
+  location    Location?
+  savedCities String[]
+  followedIds String[]   @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  preferences Preference
 }
