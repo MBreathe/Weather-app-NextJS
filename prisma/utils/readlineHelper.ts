@@ -18,7 +18,6 @@ async function readlineHelper() {
     ) {
       admin = true;
     }
-    const dropCreateAdmin = { dropDB, dropCreateAdmin: true };
     const askNumUsers = async () => {
       const answer = await rl.question(
         "How many users do you want to create? "
